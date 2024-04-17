@@ -12,7 +12,7 @@ const MainTable = () => {
     const fetchGames = async () => {
       const data = [{
         name: "Overwatch 2",
-        startTime: new Date("2024-04-17T23:00:00Z")
+        startTime: new Date("2024-04-17T21:00:00Z")
       }, {
         name: "Counter-Strike 2",
         startTime: new Date("2024-04-18T01:00:00Z")
@@ -33,7 +33,7 @@ const MainTable = () => {
     };
   }, []);
   const sortedGames = games.sort((a, b) => a.startTime - b.startTime);
-  const nextGames = sortedGames.filter(game => new Date(game.startTime) > now);
+  const nextGames = sortedGames.filter(game => game.startTime> now); //TODO: Make this have a buffer for stating a live tournament
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', height: '100vh' }}>
@@ -43,7 +43,7 @@ const MainTable = () => {
             <tr>
               <td style={{ width: '50%' }}>{nextGames[0] ? nextGames[0].name : ''}</td>
               <td style={{ width: '50%' }}>
-                {nextGames[0] ? `Starts in ${formatTime(now, nextGames[0].startTime)}` : ''}
+                {nextGames[0] ? `${getGameInfo(nextGames[0])}` : ''}
               </td>
             </tr>
           </tbody>
@@ -55,7 +55,7 @@ const MainTable = () => {
             <tr>
               <td style={{ width: '50%' }}>{nextGames[1] ? nextGames[1].name : ''}</td>
               <td style={{ width: '50%' }}>
-                {nextGames[1] ? `Starts in ${formatTime(now, nextGames[1].startTime)}` : ''}
+                {nextGames[1] ? `${getGameInfo(nextGames[1])}` : ''}
               </td>
             </tr>
           </tbody>
@@ -67,7 +67,7 @@ const MainTable = () => {
             <tr>
               <td style={{ width: '50%' }}>{nextGames[2] ? nextGames[2].name : ''}</td>
               <td style={{ width: '50%' }}>
-                {nextGames[2] ? `Starts in ${formatTime(now, nextGames[2].startTime)}` : ''}
+                {nextGames[2] ? `${getGameInfo(nextGames[2])}` : ''}
               </td>
             </tr>
           </tbody>
@@ -96,5 +96,20 @@ const formatTime = (start, end) => {
   const seconds = Math.floor((diff % (1000 * 60)) / 1000);
   return `${hours}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
 };
+
+/**
+ * Returns the game information based on the current game state.
+ *
+ * @param {Object} game - The game object containing the start time.
+ * @return {string} A string saying the game is live, or the time until that game starts.
+ */
+const getGameInfo = (game) => {
+  const now = new Date();
+  var output = "Tournament is live!";
+  if(game.startTime > now) {
+    output = `Starts in ${formatTime(now, game.startTime)}`
+  }
+  return output;
+}
 
 export default MainTable;
