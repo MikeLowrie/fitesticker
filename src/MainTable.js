@@ -88,14 +88,13 @@ const MainTable = () => {
 };
 
 const formatTime = (start, end) => {
-    // TODO: Make minutes populate with two digits
   const startTime = new Date(start);
   const endTime = new Date(end);
   const diff = endTime - startTime;
   const hours = Math.floor(diff / (1000 * 60 * 60));
   const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
   const seconds = Math.floor((diff % (1000 * 60)) / 1000);
-  return `${hours}:${minutes}:${seconds}`;
+  return `${hours}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
 };
 
 export default MainTable;
