@@ -2,9 +2,13 @@ import React, { useState, useEffect } from 'react';
 
 const MainTable = () => {
   const [games, setGames] = useState([]);
+  const [now, setNow] = useState(new Date());
 
   useEffect(() => {
-    // Replace this with your actual data fetching logic
+    const intervalId = setInterval(() => {
+        setNow(new Date());
+    }, 1000);
+    
     const fetchGames = async () => {
       const data = [{
         name: "Overwatch 2",
@@ -23,11 +27,12 @@ const MainTable = () => {
     };
 
     fetchGames();
-  }, []);
 
-  const now = new Date();
+    return () => {
+        clearInterval(intervalId);
+    };
+  }, []);
   const sortedGames = games.sort((a, b) => a.startTime - b.startTime);
-  const closestGame = sortedGames.find(game => new Date(game.startTime) >= now);
   const nextGames = sortedGames.filter(game => new Date(game.startTime) > now);
 
   return (
@@ -36,9 +41,9 @@ const MainTable = () => {
         <table style={{ width: '100%', height: '100%' }}>
           <tbody>
             <tr>
-              <td style={{ width: '50%' }}>{closestGame ? closestGame.name : ''}</td>
+              <td style={{ width: '50%' }}>{nextGames[0] ? nextGames[0].name : ''}</td>
               <td style={{ width: '50%' }}>
-                {closestGame ? `Starts in ${formatTime(now, closestGame.startTime)}` : ''}
+                {nextGames[0] ? `Starts in ${formatTime(now, nextGames[0].startTime)}` : ''}
               </td>
             </tr>
           </tbody>
@@ -50,7 +55,7 @@ const MainTable = () => {
             <tr>
               <td style={{ width: '50%' }}>{nextGames[1] ? nextGames[1].name : ''}</td>
               <td style={{ width: '50%' }}>
-                {nextGames[0] ? `Starts in ${formatTime(now, nextGames[1].startTime)}` : ''}
+                {nextGames[1] ? `Starts in ${formatTime(now, nextGames[1].startTime)}` : ''}
               </td>
             </tr>
           </tbody>
@@ -62,7 +67,7 @@ const MainTable = () => {
             <tr>
               <td style={{ width: '50%' }}>{nextGames[2] ? nextGames[2].name : ''}</td>
               <td style={{ width: '50%' }}>
-                {nextGames[1] ? `Starts in ${formatTime(now, nextGames[2].startTime)}` : ''}
+                {nextGames[2] ? `Starts in ${formatTime(now, nextGames[2].startTime)}` : ''}
               </td>
             </tr>
           </tbody>
@@ -83,6 +88,7 @@ const MainTable = () => {
 };
 
 const formatTime = (start, end) => {
+    // TODO: Make minutes populate with two digits
   const startTime = new Date(start);
   const endTime = new Date(end);
   const diff = endTime - startTime;
