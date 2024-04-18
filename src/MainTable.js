@@ -10,18 +10,23 @@ const MainTable = () => {
     }, 1000);
     
     const fetchGames = async () => {
+      /* UTC times are four hours ahead of EST (double check, might be 5 depending on daylight savings) */
       const data = [{
         name: "Overwatch 2",
-        startTime: new Date("2024-04-17T21:00:00Z")
+        startTime: new Date("2024-04-18T13:00:00Z"),
+        endTime: new Date("2024-04-18T15:00:00Z")
       }, {
         name: "Counter-Strike 2",
-        startTime: new Date("2024-04-18T01:00:00Z")
+        startTime: new Date("2024-04-19T01:00:00Z"),
+        endTime: new Date("2024-04-19T02:00:00Z")
       }, {
         name: "Wreckfest",
-        startTime: new Date("2024-04-18T02:30:00Z")
+        startTime: new Date("2024-04-19T02:30:00Z"),
+        endTime: new Date("2024-04-19T03:30:00Z")
       }, {
         name: "End of Event",
-        startTime: new Date("2024-04-18T06:00:00Z")
+        startTime: new Date("2024-04-19T06:00:00Z"),
+        endTime: new Date("2024-04-19T07:00:00Z")
       }];
       setGames(data);
     };
@@ -33,16 +38,16 @@ const MainTable = () => {
     };
   }, []);
   const sortedGames = games.sort((a, b) => a.startTime - b.startTime);
-  const nextGames = sortedGames.filter(game => game.startTime> now); //TODO: Make this have a buffer for stating a live tournament
+  const nextGames = sortedGames.filter(game => game.endTime > now); //TODO: Make this have a buffer for stating a live tournament
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', height: '100vh' }}>
       <div style={{ flex: '25%' }}>
         <table style={{ width: '100%', height: '100%' }}>
           <tbody>
-            <tr>
-              <td style={{ width: '50%' }}>{nextGames[0] ? nextGames[0].name : ''}</td>
-              <td style={{ width: '50%' }}>
+            <tr style={{ background: 'lightblue' }}>
+              <td style={{ width: '50%', textAlign: 'right', fontSize: '36px' }}>{nextGames[0] ? nextGames[0].name : ''}</td>
+              <td style={{ width: '50%', textAlign: 'center', fontSize: '36px' }}>
                 {nextGames[0] ? `${getGameInfo(nextGames[0])}` : ''}
               </td>
             </tr>
@@ -52,9 +57,9 @@ const MainTable = () => {
       <div style={{ flex: '25%' }}>
         <table style={{ width: '100%', height: '100%' }}>
           <tbody>
-            <tr>
-              <td style={{ width: '50%' }}>{nextGames[1] ? nextGames[1].name : ''}</td>
-              <td style={{ width: '50%' }}>
+            <tr style={{ background: 'lightgray' }}>
+              <td style={{ width: '50%', textAlign: 'right', fontSize: '36px'  }}>{nextGames[1] ? nextGames[1].name : ''}</td>
+              <td style={{ width: '50%', textAlign: 'center', fontSize: '36px' }}>
                 {nextGames[1] ? `${getGameInfo(nextGames[1])}` : ''}
               </td>
             </tr>
@@ -64,9 +69,9 @@ const MainTable = () => {
       <div style={{ flex: '25%' }}>
         <table style={{ width: '100%', height: '100%' }}>
           <tbody>
-            <tr>
-              <td style={{ width: '50%' }}>{nextGames[2] ? nextGames[2].name : ''}</td>
-              <td style={{ width: '50%' }}>
+            <tr style={{ background: 'lightblue' }}>
+              <td style={{ width: '50%', textAlign: 'right', fontSize: '36px'  }}>{nextGames[2] ? nextGames[2].name : ''}</td>
+              <td style={{ width: '50%', textAlign: 'center', fontSize: '36px' }}>
                 {nextGames[2] ? `${getGameInfo(nextGames[2])}` : ''}
               </td>
             </tr>
@@ -76,9 +81,9 @@ const MainTable = () => {
       <div style={{ flex: '25%' }}>
         <table style={{ width: '100%', height: '100%' }}>
           <tbody>
-            <tr>
-              <td style={{ width: '50%' }}>FITES</td>
-              <td style={{ width: '50%' }}>{formatTime(now)}</td>
+            <tr style={{ background: 'lightgray' }}>
+              <td style={{ width: '50%', textAlign: 'right', fontSize: '36px'  }}>FITES LAN Ticker</td>
+              <td style={{ width: '50%', textAlign: 'center', fontSize: '36px' }}>{`${now.toTimeString()}`}</td>
             </tr>
           </tbody>
         </table>
